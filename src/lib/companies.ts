@@ -18,15 +18,20 @@ const COLLECTION = "companies";
 export function subscribeToCompanies(
   country: Country,
   callback: (companies: Company[]) => void,
+  onError: (error: Error) => void,
 ) {
   const q = query(collection(db, COLLECTION), where("country", "==", country));
-  return onSnapshot(q, (snapshot) => {
-    const companies = snapshot.docs.map(
-      (d) => ({ id: d.id, ...d.data() }) as Company,
-    );
-    companies.sort((a, b) => a.sortOrder - b.sortOrder);
-    callback(companies);
-  });
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const companies = snapshot.docs.map(
+        (d) => ({ id: d.id, ...d.data() }) as Company,
+      );
+      companies.sort((a, b) => a.sortOrder - b.sortOrder);
+      callback(companies);
+    },
+    onError,
+  );
 }
 
 export async function createCompany(input: CompanyInput) {

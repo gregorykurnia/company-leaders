@@ -16,15 +16,24 @@ export default function Home() {
   const [country, setCountry] = useState<Country>("ID");
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Company | null>(null);
 
   useEffect(() => {
     setLoading(true);
-    const unsubscribe = subscribeToCompanies(country, (data) => {
-      setCompanies(data);
-      setLoading(false);
-    });
+    setError(null);
+    const unsubscribe = subscribeToCompanies(
+      country,
+      (data) => {
+        setCompanies(data);
+        setLoading(false);
+      },
+      (err) => {
+        setError(err.message);
+        setLoading(false);
+      },
+    );
     return unsubscribe;
   }, [country]);
 
@@ -77,6 +86,15 @@ export default function Home() {
 
         {loading ? (
           <p className="text-sm text-zinc-400">Loading...</p>
+        ) : error ? (
+          <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">
+            <p className="font-medium">Couldn&apos;t load companies.</p>
+            <p className="mt-1 text-red-600">{error}</p>
+            <p className="mt-2 text-red-500">
+              This is usually a Firestore security rules or database setup
+              issue — check the Firebase console.
+            </p>
+          </div>
         ) : companies.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-300 py-20 text-center">
             <p className="text-sm text-zinc-500">
