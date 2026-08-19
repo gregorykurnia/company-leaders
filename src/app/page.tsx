@@ -75,14 +75,16 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-3">
             <CountryTabs active={country} onChange={setCountry} />
-            <button
-              onClick={openAddModal}
-              className="whitespace-nowrap rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700"
-            >
-              + Add Company
-            </button>
           </div>
         </header>
+
+        <button
+          onClick={openAddModal}
+          aria-label="Add Company"
+          className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-zinc-900 text-2xl font-medium text-white shadow-lg hover:bg-zinc-700"
+        >
+          +
+        </button>
 
         {loading ? (
           <p className="text-sm text-zinc-400">Loading...</p>
