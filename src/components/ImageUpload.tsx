@@ -32,12 +32,12 @@ export function ImageUpload({
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+      <span className="text-sm font-medium text-zinc-700">
         {label}
       </span>
       <div
         onClick={() => inputRef.current?.click()}
-        className="group relative flex h-28 w-28 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-dashed border-zinc-300 bg-zinc-50 transition hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-900"
+        className="group relative flex h-28 w-28 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-dashed border-zinc-300 bg-zinc-50 transition hover:border-zinc-400"
       >
         {value ? (
           // eslint-disable-next-line @next/next/no-img-element
