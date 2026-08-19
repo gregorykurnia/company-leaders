@@ -1,8 +1,18 @@
 "use client";
 
-import type { Company } from "@/lib/types";
+import { DEFAULT_PHOTO_POSITION, type Company, type PhotoPosition } from "@/lib/types";
 
-function PersonAvatar({ name, photoUrl, role }: { name: string; photoUrl: string; role: string }) {
+function PersonAvatar({
+  name,
+  photoUrl,
+  position,
+  role,
+}: {
+  name: string;
+  photoUrl: string;
+  position?: PhotoPosition;
+  role: string;
+}) {
   const initials = name
     .split(" ")
     .filter(Boolean)
@@ -11,12 +21,19 @@ function PersonAvatar({ name, photoUrl, role }: { name: string; photoUrl: string
     .join("")
     .toUpperCase();
 
+  const pos = position ?? DEFAULT_PHOTO_POSITION;
+
   return (
     <div className="flex flex-1 flex-col items-center gap-2 text-center">
       <div className="h-16 w-16 overflow-hidden rounded-full bg-zinc-200">
         {photoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={photoUrl} alt={name} className="h-full w-full object-cover" />
+          <img
+            src={photoUrl}
+            alt={name}
+            className="h-full w-full object-cover"
+            style={{ objectPosition: `${pos.x}% ${pos.y}%` }}
+          />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-sm font-semibold text-zinc-500">
             {initials || "?"}
@@ -66,11 +83,13 @@ export function CompanyCard({
         <PersonAvatar
           name={company.ceoName}
           photoUrl={company.ceoPhotoUrl}
+          position={company.ceoPhotoPosition}
           role="CEO"
         />
         <PersonAvatar
           name={company.presidentCommissionerName}
           photoUrl={company.presidentCommissionerPhotoUrl}
+          position={company.presidentCommissionerPhotoPosition}
           role="President Commissioner"
         />
       </div>

@@ -2,7 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { ImageUpload } from "./ImageUpload";
-import type { Company, CompanyInput, Country } from "@/lib/types";
+import {
+  DEFAULT_PHOTO_POSITION,
+  type Company,
+  type CompanyInput,
+  type Country,
+} from "@/lib/types";
 
 const emptyForm = (country: Country, nextRank: number): CompanyInput => ({
   name: "",
@@ -10,8 +15,10 @@ const emptyForm = (country: Country, nextRank: number): CompanyInput => ({
   rank: nextRank,
   ceoName: "",
   ceoPhotoUrl: "",
+  ceoPhotoPosition: DEFAULT_PHOTO_POSITION,
   presidentCommissionerName: "",
   presidentCommissionerPhotoUrl: "",
+  presidentCommissionerPhotoPosition: DEFAULT_PHOTO_POSITION,
   country,
 });
 
@@ -112,13 +119,21 @@ export function CompanyFormModal({
             <ImageUpload
               label="CEO photo"
               value={form.ceoPhotoUrl}
+              position={form.ceoPhotoPosition}
               onChange={(url) => setForm({ ...form, ceoPhotoUrl: url })}
+              onPositionChange={(ceoPhotoPosition) =>
+                setForm({ ...form, ceoPhotoPosition })
+              }
             />
             <ImageUpload
               label="President Commissioner photo"
               value={form.presidentCommissionerPhotoUrl}
+              position={form.presidentCommissionerPhotoPosition}
               onChange={(url) =>
                 setForm({ ...form, presidentCommissionerPhotoUrl: url })
+              }
+              onPositionChange={(presidentCommissionerPhotoPosition) =>
+                setForm({ ...form, presidentCommissionerPhotoPosition })
               }
             />
           </div>
