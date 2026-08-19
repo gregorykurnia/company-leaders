@@ -4,39 +4,40 @@ import { useEffect, useState } from "react";
 import { ImageUpload } from "./ImageUpload";
 import type { Company, CompanyInput, Country } from "@/lib/types";
 
-const emptyForm = (country: Country, nextSortOrder: number): CompanyInput => ({
+const emptyForm = (country: Country, nextRank: number): CompanyInput => ({
   name: "",
+  industry: "",
+  rank: nextRank,
   ceoName: "",
   ceoPhotoUrl: "",
   presidentCommissionerName: "",
   presidentCommissionerPhotoUrl: "",
   country,
-  sortOrder: nextSortOrder,
 });
 
 export function CompanyFormModal({
   country,
-  nextSortOrder,
+  nextRank,
   company,
   onClose,
   onSave,
   onDelete,
 }: {
   country: Country;
-  nextSortOrder: number;
+  nextRank: number;
   company: Company | null;
   onClose: () => void;
   onSave: (input: CompanyInput) => Promise<void>;
   onDelete?: () => Promise<void>;
 }) {
   const [form, setForm] = useState<CompanyInput>(
-    company ?? emptyForm(country, nextSortOrder),
+    company ?? emptyForm(country, nextRank),
   );
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    setForm(company ?? emptyForm(country, nextSortOrder));
-  }, [company, country, nextSortOrder]);
+    setForm(company ?? emptyForm(country, nextRank));
+  }, [company, country, nextRank]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -66,16 +67,44 @@ export function CompanyFormModal({
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="flex gap-4">
+            <div className="flex flex-1 flex-col gap-1">
+              <label className="text-sm font-medium text-zinc-700">
+                Company name
+              </label>
+              <input
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                required
+                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+                placeholder="e.g. Bank Central Asia"
+              />
+            </div>
+            <div className="flex w-20 flex-col gap-1">
+              <label className="text-sm font-medium text-zinc-700">
+                Rank
+              </label>
+              <input
+                type="number"
+                min={1}
+                value={form.rank}
+                onChange={(e) =>
+                  setForm({ ...form, rank: Number(e.target.value) })
+                }
+                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+              />
+            </div>
+          </div>
+
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-zinc-700">
-              Company name
+              Industry
             </label>
             <input
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              required
+              value={form.industry}
+              onChange={(e) => setForm({ ...form, industry: e.target.value })}
               className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
-              placeholder="e.g. Bank Central Asia"
+              placeholder="e.g. Banking"
             />
           </div>
 

@@ -45,9 +45,23 @@ export function CompanyCard({
       onClick={onClick}
       className="flex flex-col gap-4 rounded-2xl border border-zinc-200 bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
     >
-      <h3 className="truncate text-base font-semibold text-zinc-900">
-        {company.name}
-      </h3>
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <h3 className="truncate text-base font-semibold text-zinc-900">
+            {company.name}
+          </h3>
+          {company.industry && (
+            <p className="truncate text-xs text-zinc-500">
+              {company.industry}
+            </p>
+          )}
+        </div>
+        {company.rank > 0 && (
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-xs font-semibold text-white">
+            {company.rank}
+          </span>
+        )}
+      </div>
       <div className="flex gap-4">
         <PersonAvatar
           name={company.ceoName}

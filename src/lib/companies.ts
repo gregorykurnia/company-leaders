@@ -14,7 +14,7 @@ import type { Company, CompanyInput, Country } from "./types";
 const COLLECTION = "companies";
 
 // Filtering by country only (no orderBy) avoids requiring a Firestore
-// composite index; sort by sortOrder client-side instead.
+// composite index; sort by rank client-side instead.
 export function subscribeToCompanies(
   country: Country,
   callback: (companies: Company[]) => void,
@@ -27,7 +27,7 @@ export function subscribeToCompanies(
       const companies = snapshot.docs.map(
         (d) => ({ id: d.id, ...d.data() }) as Company,
       );
-      companies.sort((a, b) => a.sortOrder - b.sortOrder);
+      companies.sort((a, b) => a.rank - b.rank);
       callback(companies);
     },
     onError,

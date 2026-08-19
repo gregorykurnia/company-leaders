@@ -123,7 +123,7 @@ export default function Home() {
       {modalOpen && (
         <CompanyFormModal
           country={country}
-          nextSortOrder={companies.length}
+          nextRank={companies.length + 1}
           company={editing}
           onClose={() => setModalOpen(false)}
           onSave={handleSave}
