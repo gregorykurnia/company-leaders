@@ -81,7 +81,7 @@ export function CompanyFormModal({
               </label>
               <input
                 value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
                 required
                 className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
                 placeholder="e.g. Bank Central Asia"
@@ -96,7 +96,7 @@ export function CompanyFormModal({
                 min={1}
                 value={form.rank}
                 onChange={(e) =>
-                  setForm({ ...form, rank: Number(e.target.value) })
+                  setForm((prev) => ({ ...prev, rank: Number(e.target.value) }))
                 }
                 className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
               />
@@ -109,7 +109,7 @@ export function CompanyFormModal({
             </label>
             <input
               value={form.industry}
-              onChange={(e) => setForm({ ...form, industry: e.target.value })}
+              onChange={(e) => setForm((prev) => ({ ...prev, industry: e.target.value }))}
               className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
               placeholder="e.g. Banking"
             />
@@ -120,9 +120,9 @@ export function CompanyFormModal({
               label="CEO photo"
               value={form.ceoPhotoUrl}
               position={form.ceoPhotoPosition}
-              onChange={(url) => setForm({ ...form, ceoPhotoUrl: url })}
+              onChange={(url) => setForm((prev) => ({ ...prev, ceoPhotoUrl: url }))}
               onPositionChange={(ceoPhotoPosition) =>
-                setForm({ ...form, ceoPhotoPosition })
+                setForm((prev) => ({ ...prev, ceoPhotoPosition }))
               }
             />
             <ImageUpload
@@ -130,10 +130,10 @@ export function CompanyFormModal({
               value={form.presidentCommissionerPhotoUrl}
               position={form.presidentCommissionerPhotoPosition}
               onChange={(url) =>
-                setForm({ ...form, presidentCommissionerPhotoUrl: url })
+                setForm((prev) => ({ ...prev, presidentCommissionerPhotoUrl: url }))
               }
               onPositionChange={(presidentCommissionerPhotoPosition) =>
-                setForm({ ...form, presidentCommissionerPhotoPosition })
+                setForm((prev) => ({ ...prev, presidentCommissionerPhotoPosition }))
               }
             />
           </div>
@@ -144,7 +144,7 @@ export function CompanyFormModal({
             </label>
             <input
               value={form.ceoName}
-              onChange={(e) => setForm({ ...form, ceoName: e.target.value })}
+              onChange={(e) => setForm((prev) => ({ ...prev, ceoName: e.target.value }))}
               className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
             />
           </div>
@@ -156,7 +156,7 @@ export function CompanyFormModal({
             <input
               value={form.presidentCommissionerName}
               onChange={(e) =>
-                setForm({ ...form, presidentCommissionerName: e.target.value })
+                setForm((prev) => ({ ...prev, presidentCommissionerName: e.target.value }))
               }
               className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
             />
