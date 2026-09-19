@@ -18,6 +18,10 @@ export interface Company {
   presidentCommissionerName: string;
   presidentCommissionerPhotoUrl: string;
   presidentCommissionerPhotoPosition: PhotoPosition;
+  /** Founder fields are only used by USA companies. */
+  founderName?: string;
+  founderPhotoUrl?: string;
+  founderPhotoPosition?: PhotoPosition;
   country: Country;
   createdAt: number;
 }

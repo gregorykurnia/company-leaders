@@ -9,18 +9,60 @@ import {
   type Country,
 } from "@/lib/types";
 
-const emptyForm = (country: Country, nextRank: number): CompanyInput => ({
-  name: "",
-  industry: "",
-  rank: nextRank,
-  ceoName: "",
-  ceoPhotoUrl: "",
-  ceoPhotoPosition: DEFAULT_PHOTO_POSITION,
-  presidentCommissionerName: "",
-  presidentCommissionerPhotoUrl: "",
-  presidentCommissionerPhotoPosition: DEFAULT_PHOTO_POSITION,
-  country,
-});
+const emptyForm = (country: Country, nextRank: number): CompanyInput => {
+  const form: CompanyInput = {
+    name: "",
+    industry: "",
+    rank: nextRank,
+    ceoName: "",
+    ceoPhotoUrl: "",
+    ceoPhotoPosition: DEFAULT_PHOTO_POSITION,
+    presidentCommissionerName: "",
+    presidentCommissionerPhotoUrl: "",
+    presidentCommissionerPhotoPosition: DEFAULT_PHOTO_POSITION,
+    country,
+  };
+
+  if (country === "US") {
+    return {
+      ...form,
+      founderName: "",
+      founderPhotoUrl: "",
+      founderPhotoPosition: DEFAULT_PHOTO_POSITION,
+    };
+  }
+
+  return form;
+};
+
+function formFromCompany(
+  company: Company,
+  country: Country,
+  nextRank: number,
+): CompanyInput {
+  return {
+    ...emptyForm(country, nextRank),
+    name: company.name,
+    industry: company.industry,
+    rank: company.rank,
+    ceoName: company.ceoName,
+    ceoPhotoUrl: company.ceoPhotoUrl,
+    ceoPhotoPosition: company.ceoPhotoPosition ?? DEFAULT_PHOTO_POSITION,
+    presidentCommissionerName: company.presidentCommissionerName,
+    presidentCommissionerPhotoUrl: company.presidentCommissionerPhotoUrl,
+    presidentCommissionerPhotoPosition:
+      company.presidentCommissionerPhotoPosition ?? DEFAULT_PHOTO_POSITION,
+    ...(country === "US"
+      ? {
+          founderName: company.founderName ?? "",
+          founderPhotoUrl: company.founderPhotoUrl ?? "",
+          founderPhotoPosition:
+            company.founderPhotoPosition ?? DEFAULT_PHOTO_POSITION,
+        }
+      : {}),
+    country: company.country,
+  };
+}
 
 export function CompanyFormModal({
   country,
@@ -37,13 +79,20 @@ export function CompanyFormModal({
   onSave: (input: CompanyInput) => Promise<void>;
   onDelete?: () => Promise<void>;
 }) {
-  const [form, setForm] = useState<CompanyInput>(
-    company ?? emptyForm(country, nextRank),
+  const isUSA = country === "US";
+  const [form, setForm] = useState<CompanyInput>(() =>
+    company
+      ? formFromCompany(company, country, nextRank)
+      : emptyForm(country, nextRank),
   );
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    setForm(company ?? emptyForm(country, nextRank));
+    setForm(
+      company
+        ? formFromCompany(company, country, nextRank)
+        : emptyForm(country, nextRank),
+    );
   }, [company, country, nextRank]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -115,7 +164,9 @@ export function CompanyFormModal({
             />
           </div>
 
-          <div className="flex gap-6">
+          <div
+            className={`grid gap-4 ${isUSA ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
+          >
             <ImageUpload
               label="CEO photo"
               value={form.ceoPhotoUrl}
@@ -126,7 +177,7 @@ export function CompanyFormModal({
               }
             />
             <ImageUpload
-              label="President Commissioner photo"
+              label={`${isUSA ? "Chairman" : "President Commissioner"} photo`}
               value={form.presidentCommissionerPhotoUrl}
               position={form.presidentCommissionerPhotoPosition}
               onChange={(url) =>
@@ -136,6 +187,19 @@ export function CompanyFormModal({
                 setForm((prev) => ({ ...prev, presidentCommissionerPhotoPosition }))
               }
             />
+            {isUSA && (
+              <ImageUpload
+                label="Founder photo"
+                value={form.founderPhotoUrl ?? ""}
+                position={form.founderPhotoPosition ?? DEFAULT_PHOTO_POSITION}
+                onChange={(url) =>
+                  setForm((prev) => ({ ...prev, founderPhotoUrl: url }))
+                }
+                onPositionChange={(founderPhotoPosition) =>
+                  setForm((prev) => ({ ...prev, founderPhotoPosition }))
+                }
+              />
+            )}
           </div>
 
           <div className="flex flex-col gap-1">
@@ -151,7 +215,7 @@ export function CompanyFormModal({
 
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-zinc-700">
-              President Commissioner name
+              {isUSA ? "Chairman" : "President Commissioner"} name
             </label>
             <input
               value={form.presidentCommissionerName}
@@ -161,6 +225,21 @@ export function CompanyFormModal({
               className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
             />
           </div>
+
+          {isUSA && (
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-zinc-700">
+                Founder name
+              </label>
+              <input
+                value={form.founderName ?? ""}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, founderName: e.target.value }))
+                }
+                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+              />
+            </div>
+          )}
 
           <div className="mt-2 flex items-center justify-between">
             <div>

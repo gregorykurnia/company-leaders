@@ -24,8 +24,8 @@ function PersonAvatar({
   const pos = position ?? DEFAULT_PHOTO_POSITION;
 
   return (
-    <div className="flex flex-1 flex-col items-center gap-2 text-center">
-      <div className="h-16 w-16 overflow-hidden rounded-full bg-zinc-200">
+    <div className="flex min-w-0 flex-1 flex-col items-center gap-2 text-center">
+      <div className="h-16 w-16 shrink-0 overflow-hidden rounded-full bg-zinc-200">
         {photoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -41,7 +41,7 @@ function PersonAvatar({
         )}
       </div>
       <div>
-        <p className="text-sm font-medium text-zinc-900">
+        <p className="break-words text-sm font-medium text-zinc-900">
           {name || "—"}
         </p>
         <p className="text-xs text-zinc-500">{role}</p>
@@ -79,7 +79,11 @@ export function CompanyCard({
           </span>
         )}
       </div>
-      <div className="flex gap-4">
+      <div
+        className={`grid gap-3 ${
+          company.country === "US" ? "grid-cols-3" : "grid-cols-2"
+        }`}
+      >
         <PersonAvatar
           name={company.ceoName}
           photoUrl={company.ceoPhotoUrl}
@@ -90,8 +94,16 @@ export function CompanyCard({
           name={company.presidentCommissionerName}
           photoUrl={company.presidentCommissionerPhotoUrl}
           position={company.presidentCommissionerPhotoPosition}
-          role="President Commissioner"
+          role={company.country === "US" ? "Chairman" : "President Commissioner"}
         />
+        {company.country === "US" && (
+          <PersonAvatar
+            name={company.founderName ?? ""}
+            photoUrl={company.founderPhotoUrl ?? ""}
+            position={company.founderPhotoPosition}
+            role="Founder"
+          />
+        )}
       </div>
     </button>
   );
