@@ -29,6 +29,7 @@ const emptyForm = (country: Country, nextRank: number): CompanyInput => {
       founderName: "",
       founderPhotoUrl: "",
       founderPhotoPosition: DEFAULT_PHOTO_POSITION,
+      establishedAt: null,
     };
   }
 
@@ -58,6 +59,7 @@ function formFromCompany(
           founderPhotoUrl: company.founderPhotoUrl ?? "",
           founderPhotoPosition:
             company.founderPhotoPosition ?? DEFAULT_PHOTO_POSITION,
+          establishedAt: company.establishedAt ?? null,
         }
       : {}),
     country: company.country,
@@ -237,6 +239,34 @@ export function CompanyFormModal({
                   setForm((prev) => ({ ...prev, founderName: e.target.value }))
                 }
                 className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+              />
+            </div>
+          )}
+
+          {isUSA && (
+            <div className="flex flex-col gap-1">
+              <label
+                htmlFor="established-at"
+                className="text-sm font-medium text-zinc-700"
+              >
+                Established At
+              </label>
+              <input
+                id="established-at"
+                type="number"
+                inputMode="numeric"
+                min={0}
+                step={1}
+                value={form.establishedAt ?? ""}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    establishedAt:
+                      e.target.value === "" ? null : Number(e.target.value),
+                  }))
+                }
+                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+                placeholder="e.g. 1901"
               />
             </div>
           )}

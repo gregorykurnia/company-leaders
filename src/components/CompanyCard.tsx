@@ -72,6 +72,11 @@ export function CompanyCard({
               {company.industry}
             </p>
           )}
+          {company.country === "US" && company.establishedAt != null && (
+            <p className="text-xs text-zinc-500">
+              Established {company.establishedAt}
+            </p>
+          )}
         </div>
         {company.rank > 0 && (
           <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-xs font-semibold text-white">

@@ -22,6 +22,8 @@ export interface Company {
   founderName?: string;
   founderPhotoUrl?: string;
   founderPhotoPosition?: PhotoPosition;
+  /** Established year is only used by USA companies. */
+  establishedAt?: number | null;
   country: Country;
   createdAt: number;
 }
