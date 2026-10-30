@@ -71,7 +71,7 @@ export function ImageUpload({
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-sm font-semibold text-ink">{label}</span>
+      <span className="sr-only">{label}</span>
       {/* Same arch shape and 4:5 ratio as the card, so the crop you set is the crop you get. */}
       <div
         ref={containerRef}

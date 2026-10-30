@@ -7,6 +7,7 @@ import {
   type Company,
   type CompanyInput,
   type Country,
+  type PhotoPosition,
 } from "@/lib/types";
 
 const emptyForm = (country: Country, nextRank: number): CompanyInput => {
@@ -170,72 +171,51 @@ export function CompanyFormModal({
             />
           </Field>
 
-          <div
-            className={`grid justify-items-start gap-4 ${isUSA ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-2"}`}
-          >
-            <ImageUpload
-              label="CEO photo"
-              value={form.ceoPhotoUrl}
-              position={form.ceoPhotoPosition}
-              onChange={(url) => setForm((prev) => ({ ...prev, ceoPhotoUrl: url }))}
-              onPositionChange={(ceoPhotoPosition) =>
-                setForm((prev) => ({ ...prev, ceoPhotoPosition }))
-              }
-            />
-            <ImageUpload
-              label={`${isUSA ? "Chairman" : "President Commissioner"} photo`}
-              value={form.presidentCommissionerPhotoUrl}
-              position={form.presidentCommissionerPhotoPosition}
-              onChange={(url) =>
-                setForm((prev) => ({ ...prev, presidentCommissionerPhotoUrl: url }))
-              }
-              onPositionChange={(presidentCommissionerPhotoPosition) =>
-                setForm((prev) => ({ ...prev, presidentCommissionerPhotoPosition }))
-              }
-            />
-            {isUSA && (
-              <ImageUpload
-                label="Founder photo"
-                value={form.founderPhotoUrl ?? ""}
-                position={form.founderPhotoPosition ?? DEFAULT_PHOTO_POSITION}
-                onChange={(url) =>
-                  setForm((prev) => ({ ...prev, founderPhotoUrl: url }))
-                }
-                onPositionChange={(founderPhotoPosition) =>
-                  setForm((prev) => ({ ...prev, founderPhotoPosition }))
-                }
-              />
-            )}
-          </div>
+          <PersonRow
+            nameLabel="CEO name"
+            name={form.ceoName}
+            onNameChange={(ceoName) => setForm((prev) => ({ ...prev, ceoName }))}
+            photoLabel="CEO photo"
+            photoUrl={form.ceoPhotoUrl}
+            photoPosition={form.ceoPhotoPosition}
+            onPhotoChange={(ceoPhotoUrl) => setForm((prev) => ({ ...prev, ceoPhotoUrl }))}
+            onPositionChange={(ceoPhotoPosition) =>
+              setForm((prev) => ({ ...prev, ceoPhotoPosition }))
+            }
+          />
 
-          <Field label="CEO name">
-            <input
-              value={form.ceoName}
-              onChange={(e) => setForm((prev) => ({ ...prev, ceoName: e.target.value }))}
-              className={inputClass}
-            />
-          </Field>
-
-          <Field label={`${isUSA ? "Chairman" : "President Commissioner"} name`}>
-            <input
-              value={form.presidentCommissionerName}
-              onChange={(e) =>
-                setForm((prev) => ({ ...prev, presidentCommissionerName: e.target.value }))
-              }
-              className={inputClass}
-            />
-          </Field>
+          <PersonRow
+            nameLabel={`${isUSA ? "Chairman" : "President Commissioner"} name`}
+            name={form.presidentCommissionerName}
+            onNameChange={(presidentCommissionerName) =>
+              setForm((prev) => ({ ...prev, presidentCommissionerName }))
+            }
+            photoLabel={`${isUSA ? "Chairman" : "President Commissioner"} photo`}
+            photoUrl={form.presidentCommissionerPhotoUrl}
+            photoPosition={form.presidentCommissionerPhotoPosition}
+            onPhotoChange={(presidentCommissionerPhotoUrl) =>
+              setForm((prev) => ({ ...prev, presidentCommissionerPhotoUrl }))
+            }
+            onPositionChange={(presidentCommissionerPhotoPosition) =>
+              setForm((prev) => ({ ...prev, presidentCommissionerPhotoPosition }))
+            }
+          />
 
           {isUSA && (
-            <Field label="Founder name">
-              <input
-                value={form.founderName ?? ""}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, founderName: e.target.value }))
-                }
-                className={inputClass}
-              />
-            </Field>
+            <PersonRow
+              nameLabel="Founder name"
+              name={form.founderName ?? ""}
+              onNameChange={(founderName) => setForm((prev) => ({ ...prev, founderName }))}
+              photoLabel="Founder photo"
+              photoUrl={form.founderPhotoUrl ?? ""}
+              photoPosition={form.founderPhotoPosition ?? DEFAULT_PHOTO_POSITION}
+              onPhotoChange={(founderPhotoUrl) =>
+                setForm((prev) => ({ ...prev, founderPhotoUrl }))
+              }
+              onPositionChange={(founderPhotoPosition) =>
+                setForm((prev) => ({ ...prev, founderPhotoPosition }))
+              }
+            />
           )}
 
           {isUSA && (
@@ -297,6 +277,46 @@ export function CompanyFormModal({
 
 const inputClass =
   "rounded-xl border border-ink/15 bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25";
+
+// A person's photo and name side by side, so each name reads as belonging to its portrait.
+function PersonRow({
+  nameLabel,
+  name,
+  onNameChange,
+  photoLabel,
+  photoUrl,
+  photoPosition,
+  onPhotoChange,
+  onPositionChange,
+}: {
+  nameLabel: string;
+  name: string;
+  onNameChange: (name: string) => void;
+  photoLabel: string;
+  photoUrl: string;
+  photoPosition: PhotoPosition;
+  onPhotoChange: (url: string) => void;
+  onPositionChange: (position: PhotoPosition) => void;
+}) {
+  return (
+    <div className="flex items-start gap-4">
+      <ImageUpload
+        label={photoLabel}
+        value={photoUrl}
+        position={photoPosition}
+        onChange={onPhotoChange}
+        onPositionChange={onPositionChange}
+      />
+      <Field label={nameLabel} className="min-w-0 flex-1 self-center">
+        <input
+          value={name}
+          onChange={(e) => onNameChange(e.target.value)}
+          className={inputClass}
+        />
+      </Field>
+    </div>
+  );
+}
 
 function Field({
   label,
