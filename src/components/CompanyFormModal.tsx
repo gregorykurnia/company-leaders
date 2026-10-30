@@ -110,38 +110,45 @@ export function CompanyFormModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-zinc-900">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4 backdrop-blur-[2px]">
+      <div className="max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-[28px] bg-white p-6 shadow-[0_30px_60px_-24px_rgba(60,45,170,0.45)] sm:p-8">
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-xl font-extrabold tracking-[-0.01em] text-ink">
             {company ? "Edit Company" : "Add Company"}
           </h2>
           <button
+            type="button"
             onClick={onClose}
-            className="text-zinc-400 hover:text-zinc-600"
+            aria-label="Close"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-accent/10"
           >
-            ✕
+            <svg
+              aria-hidden
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+            >
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div className="flex gap-4">
-            <div className="flex flex-1 flex-col gap-1">
-              <label className="text-sm font-medium text-zinc-700">
-                Company name
-              </label>
+            <Field label="Company name" className="flex-1">
               <input
                 value={form.name}
                 onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
                 required
-                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+                className={inputClass}
                 placeholder="e.g. Bank Central Asia"
               />
-            </div>
-            <div className="flex w-20 flex-col gap-1">
-              <label className="text-sm font-medium text-zinc-700">
-                Rank
-              </label>
+            </Field>
+            <Field label="Rank" className="w-20">
               <input
                 type="number"
                 min={1}
@@ -149,25 +156,22 @@ export function CompanyFormModal({
                 onChange={(e) =>
                   setForm((prev) => ({ ...prev, rank: Number(e.target.value) }))
                 }
-                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+                className={inputClass}
               />
-            </div>
+            </Field>
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-zinc-700">
-              Industry
-            </label>
+          <Field label="Industry">
             <input
               value={form.industry}
               onChange={(e) => setForm((prev) => ({ ...prev, industry: e.target.value }))}
-              className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+              className={inputClass}
               placeholder="e.g. Banking"
             />
-          </div>
+          </Field>
 
           <div
-            className={`grid gap-4 ${isUSA ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
+            className={`grid justify-items-start gap-4 ${isUSA ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-2"}`}
           >
             <ImageUpload
               label="CEO photo"
@@ -204,53 +208,38 @@ export function CompanyFormModal({
             )}
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-zinc-700">
-              CEO name
-            </label>
+          <Field label="CEO name">
             <input
               value={form.ceoName}
               onChange={(e) => setForm((prev) => ({ ...prev, ceoName: e.target.value }))}
-              className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+              className={inputClass}
             />
-          </div>
+          </Field>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-zinc-700">
-              {isUSA ? "Chairman" : "President Commissioner"} name
-            </label>
+          <Field label={`${isUSA ? "Chairman" : "President Commissioner"} name`}>
             <input
               value={form.presidentCommissionerName}
               onChange={(e) =>
                 setForm((prev) => ({ ...prev, presidentCommissionerName: e.target.value }))
               }
-              className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+              className={inputClass}
             />
-          </div>
+          </Field>
 
           {isUSA && (
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-zinc-700">
-                Founder name
-              </label>
+            <Field label="Founder name">
               <input
                 value={form.founderName ?? ""}
                 onChange={(e) =>
                   setForm((prev) => ({ ...prev, founderName: e.target.value }))
                 }
-                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+                className={inputClass}
               />
-            </div>
+            </Field>
           )}
 
           {isUSA && (
-            <div className="flex flex-col gap-1">
-              <label
-                htmlFor="established-at"
-                className="text-sm font-medium text-zinc-700"
-              >
-                Established At
-              </label>
+            <Field label="Established At">
               <input
                 id="established-at"
                 type="number"
@@ -265,10 +254,10 @@ export function CompanyFormModal({
                       e.target.value === "" ? null : Number(e.target.value),
                   }))
                 }
-                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+                className={inputClass}
                 placeholder="e.g. 1901"
               />
-            </div>
+            </Field>
           )}
 
           <div className="mt-2 flex items-center justify-between">
@@ -277,7 +266,7 @@ export function CompanyFormModal({
                 <button
                   type="button"
                   onClick={onDelete}
-                  className="text-sm text-red-500 hover:text-red-600"
+                  className="rounded-full px-3 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
                 >
                   Delete
                 </button>
@@ -287,14 +276,14 @@ export function CompanyFormModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-lg px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-100"
+                className="rounded-full px-5 py-2.5 text-sm font-semibold text-ink-soft transition-colors hover:bg-accent/10"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50"
+                className="rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-deep disabled:opacity-50"
               >
                 {saving ? "Saving..." : "Save"}
               </button>
@@ -303,5 +292,25 @@ export function CompanyFormModal({
         </form>
       </div>
     </div>
+  );
+}
+
+const inputClass =
+  "rounded-xl border border-ink/15 bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25";
+
+function Field({
+  label,
+  className = "",
+  children,
+}: {
+  label: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <label className={`flex flex-col gap-1.5 ${className}`}>
+      <span className="text-sm font-semibold text-ink">{label}</span>
+      {children}
+    </label>
   );
 }

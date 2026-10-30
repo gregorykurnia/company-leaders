@@ -71,15 +71,18 @@ export function ImageUpload({
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-sm font-medium text-zinc-700">{label}</span>
+      <span className="text-sm font-semibold text-ink">{label}</span>
+      {/* Same arch shape and 4:5 ratio as the card, so the crop you set is the crop you get. */}
       <div
         ref={containerRef}
         onClick={() => !value && inputRef.current?.click()}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
-        className={`group relative flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border border-dashed border-zinc-300 bg-zinc-50 transition hover:border-zinc-400 ${
-          value ? "cursor-grab active:cursor-grabbing" : "cursor-pointer"
+        className={`group relative flex aspect-[4/5] w-28 items-center justify-center overflow-hidden rounded-t-full rounded-b-[18px] transition ${
+          value
+            ? "cursor-grab bg-accent/10 active:cursor-grabbing"
+            : "cursor-pointer border-2 border-dashed border-accent/40 bg-accent/5 hover:border-accent"
         }`}
       >
         {value ? (
@@ -92,12 +95,12 @@ export function ImageUpload({
             style={{ objectPosition: `${position.x}% ${position.y}%` }}
           />
         ) : (
-          <span className="px-2 text-center text-xs text-zinc-400">
+          <span className="px-2 text-center text-xs font-medium text-accent">
             {uploading ? "Uploading..." : "Click to upload"}
           </span>
         )}
         {value && !dragging && (
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50 text-center text-xs text-white opacity-0 transition group-hover:opacity-100">
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-ink/60 px-2 text-center text-xs text-white opacity-0 transition group-hover:opacity-100">
             Drag to reposition
           </div>
         )}
@@ -107,14 +110,14 @@ export function ImageUpload({
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="text-zinc-500 underline hover:text-zinc-700"
+            className="font-medium text-accent underline hover:text-accent-deep"
           >
             Replace
           </button>
           <button
             type="button"
             onClick={() => onPositionChange(DEFAULT_PHOTO_POSITION)}
-            className="text-zinc-500 underline hover:text-zinc-700"
+            className="font-medium text-accent underline hover:text-accent-deep"
           >
             Reset position
           </button>
@@ -127,7 +130,7 @@ export function ImageUpload({
         className="hidden"
         onChange={(e) => handleFile(e.target.files?.[0])}
       />
-      {error && <span className="text-xs text-red-500">{error}</span>}
+      {error && <span className="text-xs text-red-600">{error}</span>}
     </div>
   );
 }
